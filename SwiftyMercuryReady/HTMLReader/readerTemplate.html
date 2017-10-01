@@ -1,0 +1,352 @@
+<html><head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>SwiftyMercuryReady</title>
+    <!--<base target="_parent">-->
+    
+    <link type="text/css" rel="stylesheet" href="style-sm.css">
+    <link type="text/css" rel="stylesheet" href="style-md.css">
+    <link type="text/css" rel="stylesheet" href="style-lg.css">
+    
+    <link type="text/css" rel="stylesheet" href="style-light.css">
+    <link type="text/css" rel="stylesheet" href="style-dark.css">
+
+    <link type="text/css" rel="stylesheet" href="style-sans.css">
+    <link type="text/css" rel="stylesheet" href="style-serif.css">
+    
+    
+
+    <style type="text/css">
+
+        @font-face {
+          font-family: 'Lora-Regular';
+          src: url('Lora-Regular.ttf') format('truetype');
+        }
+        @font-face {
+          font-family: 'Lora-Bold';
+          src: url('Lora-Bold.ttf') format('truetype');
+        }
+        @font-face {
+          font-family: 'Lato-Regular';
+          src: url('Lato-Regular.ttf') format('truetype');
+        }
+        @font-face {
+          font-family: 'Lato-Bold';
+          src: url('Lato-Bold.ttf') format('truetype');
+        }
+        @font-face {
+          font-family: 'Lato-Black';
+          src: url('Lato-Black.ttf') format('truetype');
+        }
+
+      /* General styles */
+        body {
+          margin: 0;
+        }
+        img {
+          max-width: 100%;
+          height: auto;
+        }
+        a {
+            color: #f06040;
+            text-decoration: none;
+        }
+      /* Document structure */
+        #reader {
+          min-height: 100%;
+          line-height: 1.5;
+          color: #111;
+        }
+
+        #reader-page {
+          max-width: 1000px;
+          margin-left: auto;
+          margin-right: auto;
+          padding-top: 50px;
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+        #reader-page-content {
+          margin-left: auto;
+          margin-right: auto;
+        }
+        #reader-page-content-header {
+          margin-bottom: 20px;
+          padding-bottom: 22px;
+        }
+    
+    
+      /* Header */
+        #domain-favicon {
+          display: inline;
+          vertical-align: middle;
+        }
+        .domain-name {
+          margin: 0 5px 0;
+          display: inline;
+          vertical-align: middle;
+        }
+        .bg-transparent {
+          background-color: transparent;
+        }
+        .overflow-hidden {
+          overflow: hidden;
+        }
+
+      /* Content */
+        #reader-page-content-body a {
+            border-bottom: 1px solid #f06040;
+            transition: border-bottom-color .15s ease-out, color .2s ease-out;
+        }
+
+        #reader-page-content-body a:hover {
+            border-bottom-color: #a4422f;
+            color: #a4422f;
+        }
+        #reader-page-content-body figure {
+          margin: 0;
+        }
+        #reader-page-content-body .media {
+            display: block;
+        }
+
+        #reader-page-content-body figure {
+            margin: 0;
+        }
+
+        #reader-page-content-body blockquote {
+            border-left: 3px solid #e1e1e1;
+            padding-left: 37px;
+            font-style: normal;
+            color: inherit;
+            font-size: inherit;
+        }
+
+        #reader-page-content-body figcaption {
+            font-size: 13px;
+            color: #666;
+            line-height: 16px;
+        }
+        #reader-page-content-body iframe[src^="https://player.vimeo.com/video"],
+        #reader-page-content-body iframe[src^="https://www.youtube.com/embed"],
+        #reader-page-content-body video {
+          width: 100%;
+          height: 394px;
+        }
+        #reader-page-content-body iframe {
+            border: none;
+        }
+        #reader-page-content-body h2,
+        #reader-page-content-body h3,
+        #reader-page-content-body h4,
+        #reader-page-content-body h5,
+        #reader-page-content-body h6 {
+            margin-top: 30px;
+        }
+
+        #reader-page-content-body aside:first-child,
+        #reader-page-content-body aside:last-child {
+            margin-top: 23px;
+        }
+
+        #reader-page-content-body aside {
+            padding: 0 27px 0 26px;
+        }
+
+        #reader-page-content-body {
+          font-size: 31px;
+          min-height: 100%;
+        }
+
+      /* Som */
+        .sans-demi-bold {
+          font-family: 'Lato-Bold';
+        }
+    
+        /* Loader */
+        /* source: https://codepen.io/danhearn/pen/MvqgdM */
+        #loader {
+            position: absolute;
+            top: 0; bottom: 0; left: 0; right: 0;
+            margin: auto;
+            width: 3em;
+            height: 3em;
+            animation: loaderAnim 0.75s infinite;
+            outline: 1px solid transparent;
+        }
+        #loader #largeBox {
+            height: 3em;
+            width: 3em;
+            background-color: #f06040;
+            outline: 1px solid transparent;
+            position: fixed;
+        }
+        #loader #smallBox {
+            height: 3em;
+            width: 3em;
+            position: fixed;
+            z-index: 1;
+            outline: 1px solid transparent;
+            animation: smallBoxAnim 0.75s alternate infinite ease-in-out;
+        }
+    
+        @keyframes smallBoxAnim {
+            0% {
+                transform: scale(0.2);
+            }
+            100% {
+                transform: scale(0.75);
+            }
+        }
+        @keyframes loaderAnim {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(90deg);
+            }
+        }
+    
+        
+    </style>
+    </head>
+
+    <body>  
+      <div id="reader" class="bg">
+          <div id="loader">
+              <div id="largeBox"></div>
+              <div id="smallBox"></div>
+          </div>
+        <div id="reader-page" class="bgPage overflow-hidden border">
+          <div id="reader-page-content" class="content">
+            <div id="reader-page-content-header" class="bottomSeparation">
+              <img alt="" src="" width="24" height="24" id="domain-favicon">
+              <h3 class="domain-name domain-name txtDomain sans-demi-bold" id="domain-name"></h3>
+
+              <h1 class="txtHeadline bold headline" id="headline"></h1>
+
+              <h1 class="byline txtByline sans-demi-bold">
+                <span id="author-container" style="display: none;">By <span id="author"></span></span>
+                <span id="publication-date"></span>
+              </h1>
+            </div>
+            <div id="reader-page-content-body" class="regular txtBody">
+              
+            </div>
+          </div>
+          
+
+
+        </div>
+      </div>
+    </body>
+    
+    <script type="text/javascript">
+        // Content loading
+        function setAuthor(authorName) {
+          let authorElement = document.getElementById("author");
+          let authorContainerElement = document.getElementById("author-container");
+          if (authorName == "") {
+            authorContainerElement.style.display = 'none';
+          } else {
+            authorContainerElement.style.display = 'inline';
+          }
+          authorElement.innerHTML = authorName;
+        }
+        function setHeadline(headline) {
+          let headlineElement = document.getElementById("headline");
+          if (headline == "") {
+            headlineElement.style.display = 'none';
+          } else {
+            headlineElement.style.display = 'block';
+          }
+          headlineElement.innerHTML = headline;
+        }
+        function setContent(content) {
+          let bodyContainer = document.getElementById("reader-page-content-body");
+          bodyContainer.innerHTML = content;
+        }
+
+        function setDomain(domainName) {
+          let domainElement = document.getElementById("domain-name");
+          let domainFavIconElement = document.getElementById("domain-favicon");
+          if (domainName == "") {
+            domainElement.style.display = 'none';
+          } else {
+            domainElement.style.display = 'inline';
+          }
+          domainElement.innerHTML = domainName;
+          domainFavIconElement.attributes["src"].textContent = "https://api.statvoo.com/favicon/?url=" + domainName;
+          domainFavIconElement.attributes["alt"].textContent = domainName;
+        }
+
+        function setPublicationDate(date) {
+          let dateElement = document.getElementById("publication-date");
+          if (date == "") {
+            dateElement.style.display = 'none';
+          } else {
+            dateElement.style.display = 'inline';
+          }
+          dateElement.innerHTML = date;
+          
+        }
+    
+        function showLoader() {
+            let loaderElement = document.getElementById("loader")
+            loaderElement.style.display = 'block';
+        }
+    
+        function hideLoader() {
+            let loaderElement = document.getElementById("loader")
+            loaderElement.style.display = 'none';
+        }
+    
+        function clearData() {
+            setHeadline("")
+            setContent("")
+            setDomain("")
+            setPublicationDate("")
+            setAuthor("")
+        }
+    
+    
+    
+        let cssOffset = 0 // index of the first css concerning the apparence
+        // Apparence
+        let darkThemeId = 1
+        let lightThemeId = 0
+        function setTheme(themeId) {
+          for (var i=cssOffset+3; i<cssOffset+5; i++) {
+            document.styleSheets[i].disabled = true;
+          } 
+          document.styleSheets[cssOffset+3+themeId].disabled = false;
+        }
+    
+    
+        let smallSizeId = 0
+        let mediumSizeId = 1
+        let largeThemeId = 2
+        function setSize(sizeId) {
+          for (var i=cssOffset+0; i<cssOffset+3; i++) {
+            document.styleSheets[i].disabled = true;
+          } 
+          document.styleSheets[cssOffset+sizeId].disabled = false;
+
+          // TODO: Why it doesn't work by just changing the font-size in the css?
+          //let fontSizes = ["17", "31", "45"];
+          let fontSizes = ["100", "125", "140"];
+          //document.getElementById("reader-page-content-body").style.fontSize = fontSizes[sizeId] + "px";
+          document.getElementById("reader-page-content-body").style.webkitTextSizeAdjust = fontSizes[sizeId] + "%";
+        }
+
+        // serif: bool
+        function setSerif(serif) {
+          for (var i=cssOffset+5; i<cssOffset+7; i++) {
+            document.styleSheets[i].disabled = true;
+          } 
+          document.styleSheets[cssOffset+5+serif].disabled = false;
+        }
+        
+    </script>
+
+
+</html>

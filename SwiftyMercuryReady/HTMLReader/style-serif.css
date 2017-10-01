@@ -1,0 +1,11 @@
+.bold {
+	font-family: 'Lora-Bold';
+}
+
+.regular {
+	font-family: 'Lora-Regular';
+}
+
+#reader-page-content-body figcaption {
+	font-family: 'Lora-Bold';
+}

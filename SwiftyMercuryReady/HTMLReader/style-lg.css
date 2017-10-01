@@ -1,0 +1,20 @@
+.content {
+  max-width: 820px;
+}
+.domain-name {
+  font-size: 20px;
+}
+.headline {
+  font-size: 60px;
+  letter-spacing: -0.6px;
+  line-height: 56px;
+  margin: 13px 0 26px 0;
+}
+.byline {
+  font-size: 20px;
+  letter-spacing: -0.3px;
+}
+#reader-page-content-body {
+  /*font-size: 38px;*/
+  line-height: 45px;
+}

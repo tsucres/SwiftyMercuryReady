@@ -1,0 +1,11 @@
+.bold {
+	font-family: 'Lato-Black';
+}
+
+.regular {
+	font-family: 'Lato-Regular';
+}
+
+#reader-page-content-body figcaption {
+	font-family: 'Lato-Bold';
+}

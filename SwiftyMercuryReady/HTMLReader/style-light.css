@@ -1,0 +1,27 @@
+.bg {
+  background-color: #e9e9e9;
+}
+.bgPage {
+  background-color: #f8f8f8;
+}
+.txtDomain {
+  color: #696969;
+}
+.txtHeadline {
+    color: #333333;
+}
+.txtByline {
+  color: #696969;
+}
+.txtBody {
+  color: #333333;
+}
+.border {
+	border: 1px solid #dbdbdb;
+}
+.bottomSeparation {
+	border-bottom: 2px solid #e9e9e9;
+}
+#loader #smallBox {
+    background-color: #f8f8f8;
+}
