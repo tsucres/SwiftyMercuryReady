@@ -108,7 +108,7 @@ class ScrollableNavBarViewController: UIViewController, UIScrollViewDelegate {
         if let navCtrl = self.navigationController {
             let frame: CGRect = navCtrl.navigationBar.frame
             if frame.origin.y < 20 {
-                //self.animateNavBarTo(y:-(frame.size.height - 21))
+                self.animateNavBarTo(y:-(frame.size.height - 21))
                 self.animateToolBarTo(y: UIScreen.main.bounds.height)
             }
         }

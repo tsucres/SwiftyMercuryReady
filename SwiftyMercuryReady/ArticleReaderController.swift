@@ -84,16 +84,45 @@ class ArticleReaderController: ScrollableNavBarViewController, WKNavigationDeleg
         if (self.responds(to: #selector(getter: edgesForExtendedLayout))) {
             self.edgesForExtendedLayout = []
         }
+
+        setupNavBar()
+        setupToolBar()
+        setupWebViews()
+        
+        updateReaderBackgroundColor()
         
         
+        // They're hidden by default until a history is built
+        navBarTitleView?.backButton.isHidden = true
+        navBarTitleView?.forwardButton.isHidden = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isToolbarHidden = false
+        reloadToolbarItems()
+        updateNavbarColors()
+        updateToolbarColors()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
+        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.title))
+        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.canGoForward))
+        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.canGoBack))
+    }
+    
+    private func setupWebViews() {
         // Sets the webView's insets
         self.automaticallyAdjustsScrollViewInsets = false
-
+        
         let navBarHeight = self.navigationController?.navigationBar.frame.height ?? 0
         let toolbarHeight = self.navigationController?.toolbar.frame.height ?? 0
         self.webView.scrollView.contentInset = UIEdgeInsets(top: navBarHeight + 20, left: 0, bottom: toolbarHeight, right: 0)
         self.reader.scrollView.contentInset = UIEdgeInsets(top: navBarHeight + 20, left: 0, bottom: toolbarHeight, right: 0)
-        
+        self.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: navBarHeight + 20, left: 0, bottom: toolbarHeight, right: 0)
+        self.reader.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: navBarHeight + 20, left: 0, bottom: toolbarHeight, right: 0)
         
         self.view.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
@@ -110,34 +139,11 @@ class ArticleReaderController: ScrollableNavBarViewController, WKNavigationDeleg
         reader.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
         reader.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: navBarHeight + toolbarHeight + 20).isActive = true
         
-        updateReaderBackgroundColor()
-        
-        
-        setupNavBar()
-        setupToolBar()
-        
         webView.scrollView.delegate = self
         reader.scrollView.delegate = self
         
         self.webView.navigationDelegate = self
         self.reader.readerDelegate = self
-        
-        // They're hidden by default until a history is built
-        navBarTitleView?.backButton.isHidden = true
-        navBarTitleView?.forwardButton.isHidden = true
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.isToolbarHidden = false
-        reloadToolbarItems()
-        updateNavbarColors()
-        updateToolbarColors()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
-        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.title))
     }
    
     private func setupNavBar() {
@@ -151,7 +157,8 @@ class ArticleReaderController: ScrollableNavBarViewController, WKNavigationDeleg
         // Data binding
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.title), options: .new, context: nil)
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
-        
+        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoBack), options: .new, context: nil)
+        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoForward), options: .new, context: nil)
         navBarTitleView?.backButton.addTarget(self, action: #selector(undoWebView), for: .touchUpInside)
         navBarTitleView?.forwardButton.addTarget(self, action: #selector(redoWebView), for: .touchUpInside)
         
@@ -383,6 +390,10 @@ class ArticleReaderController: ScrollableNavBarViewController, WKNavigationDeleg
         } else if keyPath == "title" {
             navBarTitleView?.title = webView.title
             navBarTitleView?.subtitle = webView.url?.absoluteString
+        } else if keyPath == "canGoBack" {
+            undoBarBtnItem!.isEnabled = webView.canGoBack
+        } else if keyPath == "canGoForward" {
+            redoBarBtnItem!.isEnabled = webView.canGoForward
         }
         
     }
