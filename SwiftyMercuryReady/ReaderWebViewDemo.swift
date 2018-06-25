@@ -22,8 +22,9 @@ class ReaderWebViewController: UIViewController {
         readerWebView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         
         
-        readerWebView.load(url: URL(string: "https://www.eff.org/alice")!)
-        
+        //readerWebView.load(url: URL(string: "https://www.eff.org/alice")!)
+        //readerWebView.load(url: URL(string: "https://www.flightradar24.com/FIN6KC/f31526e")!)
+        readerWebView.load(url: URL(string: "https://blog.openai.com/openai-five/")!)
         
         let btnTheme = UIButton()
         btnTheme.setTitle("Theme", for: .normal)

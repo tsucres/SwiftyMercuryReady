@@ -19,8 +19,20 @@
 		97081C931F672DAB00FF7268 /* NavBarTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97081C921F672DAB00FF7268 /* NavBarTitleView.swift */; };
 		97081C951F67BDC400FF7268 /* ScrollableNavBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97081C941F67BDC400FF7268 /* ScrollableNavBarViewController.swift */; };
 		97578AE11F68160500A24273 /* ReaderToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97578AE01F68160500A24273 /* ReaderToolBar.swift */; };
+		97A2CE2620E12565007AFC3C /* SwiftyMercuryReadyTesty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97A2CE2520E12565007AFC3C /* SwiftyMercuryReadyTesty.swift */; };
+		97A2CE2E20E12D65007AFC3C /* SwiftyMercuryApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9706DC921F07B4580054D133 /* SwiftyMercuryApi.swift */; };
 		97D0D88E1F7FB233007DE08A /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 97D0D88D1F7FB233007DE08A /* keys.plist */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		97A2CE2820E12565007AFC3C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9706DC751F07B4070054D133 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9706DC7C1F07B4070054D133;
+			remoteInfo = SwiftyMercuryReady;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		9706DC7D1F07B4070054D133 /* SwiftyMercuryReady.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftyMercuryReady.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,11 +49,21 @@
 		97081C921F672DAB00FF7268 /* NavBarTitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavBarTitleView.swift; sourceTree = "<group>"; };
 		97081C941F67BDC400FF7268 /* ScrollableNavBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollableNavBarViewController.swift; sourceTree = "<group>"; };
 		97578AE01F68160500A24273 /* ReaderToolBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderToolBar.swift; sourceTree = "<group>"; };
+		97A2CE2320E12565007AFC3C /* SwiftyMercuryReadyTesty.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftyMercuryReadyTesty.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		97A2CE2520E12565007AFC3C /* SwiftyMercuryReadyTesty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyMercuryReadyTesty.swift; sourceTree = "<group>"; };
+		97A2CE2720E12565007AFC3C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		97D0D88D1F7FB233007DE08A /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		9706DC7A1F07B4070054D133 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		97A2CE2020E12565007AFC3C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -55,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				9706DC7F1F07B4070054D133 /* SwiftyMercuryReady */,
+				97A2CE2420E12565007AFC3C /* SwiftyMercuryReadyTesty */,
 				9706DC7E1F07B4070054D133 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -63,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				9706DC7D1F07B4070054D133 /* SwiftyMercuryReady.app */,
+				97A2CE2320E12565007AFC3C /* SwiftyMercuryReadyTesty.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -112,6 +136,15 @@
 			name = ArticleReaderDemo;
 			sourceTree = "<group>";
 		};
+		97A2CE2420E12565007AFC3C /* SwiftyMercuryReadyTesty */ = {
+			isa = PBXGroup;
+			children = (
+				97A2CE2520E12565007AFC3C /* SwiftyMercuryReadyTesty.swift */,
+				97A2CE2720E12565007AFC3C /* Info.plist */,
+			);
+			path = SwiftyMercuryReadyTesty;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -132,13 +165,31 @@
 			productReference = 9706DC7D1F07B4070054D133 /* SwiftyMercuryReady.app */;
 			productType = "com.apple.product-type.application";
 		};
+		97A2CE2220E12565007AFC3C /* SwiftyMercuryReadyTesty */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 97A2CE2C20E12565007AFC3C /* Build configuration list for PBXNativeTarget "SwiftyMercuryReadyTesty" */;
+			buildPhases = (
+				97A2CE1F20E12565007AFC3C /* Sources */,
+				97A2CE2020E12565007AFC3C /* Frameworks */,
+				97A2CE2120E12565007AFC3C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				97A2CE2920E12565007AFC3C /* PBXTargetDependency */,
+			);
+			name = SwiftyMercuryReadyTesty;
+			productName = SwiftyMercuryReadyTesty;
+			productReference = 97A2CE2320E12565007AFC3C /* SwiftyMercuryReadyTesty.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		9706DC751F07B4070054D133 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0830;
+				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Stéphane Sercu";
 				TargetAttributes = {
@@ -147,6 +198,12 @@
 						DevelopmentTeam = 5P2WT92MAV;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
+					};
+					97A2CE2220E12565007AFC3C = {
+						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = 5P2WT92MAV;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 9706DC7C1F07B4070054D133;
 					};
 				};
 			};
@@ -164,6 +221,7 @@
 			projectRoot = "";
 			targets = (
 				9706DC7C1F07B4070054D133 /* SwiftyMercuryReady */,
+				97A2CE2220E12565007AFC3C /* SwiftyMercuryReadyTesty */,
 			);
 		};
 /* End PBXProject section */
@@ -177,6 +235,13 @@
 				9706DC8B1F07B4070054D133 /* LaunchScreen.storyboard in Resources */,
 				9706DC951F083F980054D133 /* HTMLReader in Resources */,
 				9706DC881F07B4070054D133 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		97A2CE2120E12565007AFC3C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,7 +264,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		97A2CE1F20E12565007AFC3C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				97A2CE2E20E12D65007AFC3C /* SwiftyMercuryApi.swift in Sources */,
+				97A2CE2620E12565007AFC3C /* SwiftyMercuryReadyTesty.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		97A2CE2920E12565007AFC3C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9706DC7C1F07B4070054D133 /* SwiftyMercuryReady */;
+			targetProxy = 97A2CE2820E12565007AFC3C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		9706DC891F07B4070054D133 /* LaunchScreen.storyboard */ = {
@@ -346,6 +428,48 @@
 			};
 			name = Release;
 		};
+		97A2CE2A20E12565007AFC3C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5P2WT92MAV;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = SwiftyMercuryReadyTesty/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.StephSercu.SwiftyMercuryReadyTesty;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftyMercuryReady.app/SwiftyMercuryReady";
+			};
+			name = Debug;
+		};
+		97A2CE2B20E12565007AFC3C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5P2WT92MAV;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = SwiftyMercuryReadyTesty/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.StephSercu.SwiftyMercuryReadyTesty;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftyMercuryReady.app/SwiftyMercuryReady";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -363,6 +487,15 @@
 			buildConfigurations = (
 				9706DC901F07B4070054D133 /* Debug */,
 				9706DC911F07B4070054D133 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		97A2CE2C20E12565007AFC3C /* Build configuration list for PBXNativeTarget "SwiftyMercuryReadyTesty" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				97A2CE2A20E12565007AFC3C /* Debug */,
+				97A2CE2B20E12565007AFC3C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

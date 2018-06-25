@@ -13,7 +13,7 @@ import Foundation
  Just send an url and retrieve the parsed content 
  of the page the url points to.
  */
-class MercuryApi {
+open class MercuryApi {
     private var apiKey = ""
     private let apiUrl = "https://mercury.postlight.com/parser?url="
     
@@ -31,7 +31,7 @@ class MercuryApi {
     
     public static let shared = MercuryApi()
     
-    func parseUrl(url: String, completion: ((MercuryResponse?) -> Void)!) {
+    public func parseUrl(url: String, completion: ((MercuryResponse?) -> Void)!) {
         var req = URLRequest(url: URL(string: self.apiUrl + url)!)
         req.addValue(self.apiKey, forHTTPHeaderField: "x-api-key")
         req.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -39,13 +39,18 @@ class MercuryApi {
             if json == nil {
                 completion(nil)
             } else {
-                completion(MercuryResponse(fromJson: json!))
+                if (json!.count == 1 && (((json!["message"] as? String) != nil))) ||
+                    (json!.count == 2 && (((json!["messages"] as? String) != nil)) && (((json!["error"] as? Int) != nil))) {
+                    completion(nil) // Error
+                } else {
+                    completion(MercuryResponse(fromJson: json!))
+                }
             }
         })
     }
     
     /// Helper function which send HTTP req. and parse the json content in the response (if any)
-    private func getJson(request: URLRequest, completion: @escaping (Dictionary<String, Any>?) -> Void) {
+    private func getJson(request: URLRequest, completion: @escaping ([String: Any]?) -> Void) {
         let task = URLSession.shared.dataTask(with: request, completionHandler: {(data, response, error) -> Void in
             
             guard let responseData = data else {
@@ -55,6 +60,7 @@ class MercuryApi {
                 })
                 return
             }
+            
             guard let JSON = try? JSONSerialization.jsonObject(with: responseData, options: .mutableContainers) as! [String: Any]
                 else {
                     DispatchQueue.main.async(execute: { ()->() in
@@ -71,7 +77,7 @@ class MercuryApi {
 }
 
 /// Abstraction of a typical json response sent by the api.
-class MercuryResponse {
+open class MercuryResponse {
     init(fromJson json: [String: Any]) {
         self.title = json["title"] as? String
         self.author = json["author"] as? String
@@ -89,8 +95,6 @@ class MercuryResponse {
         self.total_pages = json["total_pages"] as? Int
         self.rendered_pages = json["rendered_pages"] as? Int
         self.next_page_url = json["next_page_url"] as? String
-        
-        
     }
     
     /// Transform the date returned by the API (string format: 2017-06-13T00:14:56.000Z) to a Date object

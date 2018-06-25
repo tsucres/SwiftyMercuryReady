@@ -420,8 +420,10 @@ class ArticleReaderController: ScrollableNavBarViewController, WKNavigationDeleg
     
     /// Define what to do if the user clicks on a link inside the reader
     func navigationRequested(request: URLRequest, navigationType: WKNavigationType) {
-        self.isReaderEnabled = false
-        self.webView.load(request)
+        if navigationType != .other {
+            self.isReaderEnabled = false
+            self.webView.load(request)
+        }
     }
     
     func contentDidLoad(reader: ReaderWebView, content: MercuryResponse) {

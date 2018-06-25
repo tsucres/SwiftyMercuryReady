@@ -18,7 +18,7 @@ class Article {
         get {
             var dom: String = URL(string: self.url)!.host!
             if dom.hasPrefix("www.") {
-                dom = String(dom.characters.dropFirst(4))
+                dom = String(dom.dropFirst(4))
             }
             return dom
         }
@@ -55,7 +55,14 @@ class ArticleTableViewController: UITableViewController {
                     Article(title: "WiFi232 – An Internet Hayes Modem for your Retro Computer",
                             url: "http://biosrhythm.com/?page_id=1453"),
                     Article(title: "Why does Heap's algorithm work?",
-                            url: "http://ruslanledesma.com/2016/06/17/why-does-heap-work.html")]
+                            url: "http://ruslanledesma.com/2016/06/17/why-does-heap-work.html"),
+                    Article(title: "How SQL Database Engines Work, by the Creator of SQLite (2008) [video]",
+                            url:"https://www.youtube.com/watch?v=Z_cX3bzkExE"),
+                    Article(title: "OpenAI Five",
+                            url:"https://blog.openai.com/openai-five/"),
+                    Article(title: "“No Man’s Sky” Displayed on the Amiga 1000",
+                            url:"http://www.bytecellar.com/2018/03/14/a-planetary-anachronism-no-mans-sky-beautifully-rendered-on-the-amiga-1000/"),
+                    ]
     
     private let cellId = "articleCellid"
     
