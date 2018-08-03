@@ -84,7 +84,7 @@ class ArticleReaderController: ScrollableNavBarViewController, WKNavigationDeleg
         if (self.responds(to: #selector(getter: edgesForExtendedLayout))) {
             self.edgesForExtendedLayout = []
         }
-
+        
         setupNavBar()
         setupToolBar()
         setupWebViews()
@@ -100,9 +100,15 @@ class ArticleReaderController: ScrollableNavBarViewController, WKNavigationDeleg
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.isToolbarHidden = false
+        self.extendedLayoutIncludesOpaqueBars = true
+        self.edgesForExtendedLayout = UIRectEdge.all
         reloadToolbarItems()
         updateNavbarColors()
         updateToolbarColors()
+        if #available(iOS 11.0, *) {
+            self.view.insetsLayoutMarginsFromSafeArea = false
+            
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -118,7 +124,7 @@ class ArticleReaderController: ScrollableNavBarViewController, WKNavigationDeleg
         self.automaticallyAdjustsScrollViewInsets = false
         
         let navBarHeight = self.navigationController?.navigationBar.frame.height ?? 0
-        let toolbarHeight = self.navigationController?.toolbar.frame.height ?? 0
+        let toolbarHeight:CGFloat = 0//self.navigationController?.toolbar.frame.height ?? 0
         self.webView.scrollView.contentInset = UIEdgeInsets(top: navBarHeight + 20, left: 0, bottom: toolbarHeight, right: 0)
         self.reader.scrollView.contentInset = UIEdgeInsets(top: navBarHeight + 20, left: 0, bottom: toolbarHeight, right: 0)
         self.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: navBarHeight + 20, left: 0, bottom: toolbarHeight, right: 0)

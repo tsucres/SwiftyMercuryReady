@@ -39,26 +39,29 @@ class ScrollableNavBarViewController: UIViewController, UIScrollViewDelegate {
     private var previousWebviewYOffset: CGFloat = 0
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if #available(iOS 11, *) { // The method here stopped working in ios11. so.. TODO
-            return
-        }
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        
         if let navCtrl = navigationController {
             let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView)
             
             var navFrame: CGRect = navCtrl.navigationBar.frame
             var toolFrame: CGRect = navCtrl.toolbar.frame
             
-            let navSize: CGFloat = navFrame.size.height - 21
+            let navSize: CGFloat = navFrame.size.height - statusBarHeight - 1
             let toolSize: CGFloat = toolFrame.size.height
 
-            let navFramePercentageHidden: CGFloat = ((20 - navFrame.origin.y) / (navFrame.size.height - 1))
-            let toolFramePercentageHidden: CGFloat = 1 - ((UIScreen.main.bounds.height - toolFrame.origin.y) / (toolFrame.size.height - 1))
+            
             
             let scrollOffset: CGFloat = scrollView.contentOffset.y
             let scrollDiff: CGFloat = scrollOffset - self.previousWebviewYOffset
             let scrollHeight: CGFloat = scrollView.frame.size.height
             let scrollContentSizeHeight: CGFloat = scrollView.contentSize.height + scrollView.contentInset.bottom
-
+            
+            var bottomSafeAreaHeight:CGFloat = 0.0
+            if #available(iOS 11.0, *) {
+                bottomSafeAreaHeight = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0.0
+            }
+            
             if navFrame.origin.y == -navSize && abs(velocity.y) < 300 {
                 self.previousWebviewYOffset = scrollOffset
                 return
@@ -66,8 +69,8 @@ class ScrollableNavBarViewController: UIViewController, UIScrollViewDelegate {
             
             if scrollOffset <= -scrollView.contentInset.top { // Full top
                 // We completly show the toolbar and the navbar
-                navFrame.origin.y = 20
-                toolFrame.origin.y = UIScreen.main.bounds.height - toolSize
+                navFrame.origin.y = statusBarHeight
+                toolFrame.origin.y = UIScreen.main.bounds.height - toolSize - bottomSafeAreaHeight
                 
             } else if (scrollOffset + scrollHeight) >= scrollContentSizeHeight { // Full bottom
                 // We completly hide the toolbar and the navbar
@@ -75,11 +78,14 @@ class ScrollableNavBarViewController: UIViewController, UIScrollViewDelegate {
                 toolFrame.origin.y = UIScreen.main.bounds.height
             } else {
                 // Something in between
-                navFrame.origin.y = min(20, max(-navSize, navFrame.origin.y - scrollDiff))
+                navFrame.origin.y = min(statusBarHeight, max(-navSize, navFrame.origin.y - scrollDiff))
                 toolFrame.origin.y = max(UIScreen.main.bounds.height - toolSize, min(UIScreen.main.bounds.height, toolFrame.origin.y + scrollDiff))
             }
             navCtrl.navigationBar.frame = navFrame
             navCtrl.toolbar.frame = toolFrame
+            
+            let navFramePercentageHidden: CGFloat = ((statusBarHeight - navFrame.origin.y) / (navFrame.size.height - 1))
+            let toolFramePercentageHidden: CGFloat = 1 - ((UIScreen.main.bounds.height - bottomSafeAreaHeight - toolFrame.origin.y) / (toolFrame.size.height - 1))
             
             updateNavBarButtonItems(alpha: 1 - navFramePercentageHidden)
             updateToolBarButtonItems(alpha: 1 - toolFramePercentageHidden)
@@ -107,8 +113,8 @@ class ScrollableNavBarViewController: UIViewController, UIScrollViewDelegate {
     private func stoppedScrolling() {
         if let navCtrl = self.navigationController {
             let frame: CGRect = navCtrl.navigationBar.frame
-            if frame.origin.y < 20 {
-                self.animateNavBarTo(y:-(frame.size.height - 21))
+            if frame.origin.y < UIApplication.shared.statusBarFrame.height {
+                self.animateNavBarTo(y:-(frame.size.height - UIApplication.shared.statusBarFrame.height - 1))
                 self.animateToolBarTo(y: UIScreen.main.bounds.height)
             }
         }
