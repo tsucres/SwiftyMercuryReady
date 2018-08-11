@@ -6,6 +6,8 @@
 //  Copyright © 2017 Stéphane Sercu. All rights reserved.
 //
 
+// Warning: This code is a mess. It is a nightmare to debug.
+
 import UIKit
 
 class ScrollableNavBarViewControllerTest: ScrollableNavBarViewController {
@@ -53,33 +55,31 @@ class ScrollableNavBarViewController: UIViewController, UIScrollViewDelegate {
             
             
             let scrollOffset: CGFloat = scrollView.contentOffset.y
+            let scrollInset: CGFloat = scrollView.contentInset.top
             let scrollDiff: CGFloat = scrollOffset - self.previousWebviewYOffset
             let scrollHeight: CGFloat = scrollView.frame.size.height
             let scrollContentSizeHeight: CGFloat = scrollView.contentSize.height + scrollView.contentInset.bottom
             
-            var bottomSafeAreaHeight:CGFloat = 0.0
-            if #available(iOS 11.0, *) {
-                bottomSafeAreaHeight = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0.0
-            }
+            let bottomSafeAreaHeight:CGFloat = getBottomSafeHeight()
             
-            if navFrame.origin.y == -navSize && abs(velocity.y) < 300 {
+            if navFrame.origin.y == -navSize && abs(velocity.y) < 300 && scrollOffset + scrollInset >= navFrame.size.height {
                 self.previousWebviewYOffset = scrollOffset
                 return
             }
             
-            if scrollOffset <= -scrollView.contentInset.top { // Full top
+            if scrollOffset <= -scrollInset { // Full top
                 // We completly show the toolbar and the navbar
                 navFrame.origin.y = statusBarHeight
                 toolFrame.origin.y = UIScreen.main.bounds.height - toolSize - bottomSafeAreaHeight
                 
-            } else if (scrollOffset + scrollHeight) >= scrollContentSizeHeight { // Full bottom
+            } else if (scrollOffset + scrollHeight + scrollInset) >= scrollContentSizeHeight { // Full bottom
                 // We completly hide the toolbar and the navbar
                 navFrame.origin.y = -navSize
                 toolFrame.origin.y = UIScreen.main.bounds.height
             } else {
                 // Something in between
                 navFrame.origin.y = min(statusBarHeight, max(-navSize, navFrame.origin.y - scrollDiff))
-                toolFrame.origin.y = max(UIScreen.main.bounds.height - toolSize, min(UIScreen.main.bounds.height, toolFrame.origin.y + scrollDiff))
+                toolFrame.origin.y = max(UIScreen.main.bounds.height - toolSize - bottomSafeAreaHeight, min(UIScreen.main.bounds.height, toolFrame.origin.y + scrollDiff))
             }
             navCtrl.navigationBar.frame = navFrame
             navCtrl.toolbar.frame = toolFrame
@@ -99,23 +99,37 @@ class ScrollableNavBarViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        self.stoppedScrolling()
+        self.stoppedScrolling(scrollView: scrollView)
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
-            self.stoppedScrolling()
+            self.stoppedScrolling(scrollView: scrollView)
         }
     }
     
     /// Depending on the current position of the navBar (weither it's
     /// mostly in/out of the bounds of the screen), move the navBar in/out
     /// of the screen.
-    private func stoppedScrolling() {
+    private func stoppedScrolling(scrollView: UIScrollView) {
         if let navCtrl = self.navigationController {
             let frame: CGRect = navCtrl.navigationBar.frame
-            if frame.origin.y < UIApplication.shared.statusBarFrame.height {
-                self.animateNavBarTo(y:-(frame.size.height - UIApplication.shared.statusBarFrame.height - 1))
-                self.animateToolBarTo(y: UIScreen.main.bounds.height)
+            
+            // The y distance left for the navbar to be completely hidden
+            let dy = frame.origin.y + frame.size.height - getTopSafeHeight() - 1
+            if dy > 0 { // If not completly hidden
+                let currentContentOffset = scrollView.contentOffset
+                if dy > 0.6*frame.height {
+                    scrollView.setContentOffset(CGPoint(x: currentContentOffset.x, y: currentContentOffset.y - frame.height + dy + 1), animated: true)
+                    self.animateNavBarFullShow()
+                    self.animateToolBarFullShow()
+                } else {
+                    scrollView.setContentOffset(CGPoint(x: currentContentOffset.x, y:  currentContentOffset.y + dy), animated: true)
+                    self.animateNavBarFullHide()
+                    self.animateToolBarFullHide()
+                }
+                
+            } else {
+                self.animateToolBarFullHide() // On the iphone X, the toolbar is bigger than the navbar, so it may happen that the navbar is completely hidden but that toolbar isn't
             }
         }
         
@@ -154,22 +168,53 @@ class ScrollableNavBarViewController: UIViewController, UIScrollViewDelegate {
         if let navCtrl = self.navigationController {
             UIView.animate(withDuration: 0.2, animations: {
                 var frame: CGRect = navCtrl.navigationBar.frame;
-                let alpha: CGFloat = frame.origin.y >= y ? 0 : 1
+                let alpha: CGFloat = frame.origin.y > y ? 0 : 1
                 frame.origin.y = y;
                 navCtrl.navigationBar.frame = frame
                 self.updateNavBarButtonItems(alpha: alpha)
             })
         }
     }
+    
+    private func animateNavBarFullShow() {
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        self.animateNavBarTo(y:statusBarHeight)
+    }
+    private func animateNavBarFullHide() {
+        let y = -((self.navigationController?.navigationBar.frame.size.height ?? 0) - self.getTopSafeHeight() - 1)
+        self.animateNavBarTo(y:y)
+    }
     private func animateToolBarTo(y: CGFloat) {
         if let navCtrl = self.navigationController {
             UIView.animate(withDuration: 0.2, animations: {
                 var frame: CGRect = navCtrl.toolbar.frame;
-                let alpha: CGFloat = frame.origin.y >= y ? 0 : 1
+                let alpha: CGFloat = frame.origin.y < y ? 0 : 1
                 frame.origin.y = y;
                 navCtrl.toolbar.frame = frame
                 self.updateToolBarButtonItems(alpha: alpha)
             })
         }
+    }
+    
+    private func animateToolBarFullShow() {
+        let toolSize = (self.navigationController?.toolbar.frame.height ?? 0)
+        let bottomSafeAreaHeight:CGFloat = getBottomSafeHeight()
+        animateToolBarTo(y: UIScreen.main.bounds.height - toolSize - bottomSafeAreaHeight)
+    }
+    private func animateToolBarFullHide() {
+        animateToolBarTo(y: UIScreen.main.bounds.height)
+    }
+    
+    private func getTopSafeHeight() -> CGFloat {
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        return statusBarHeight
+    }
+    
+    private func getBottomSafeHeight() -> CGFloat {
+        var bottomSafeAreaHeight:CGFloat = 0.0
+        if #available(iOS 11.0, *) {
+            bottomSafeAreaHeight = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0.0
+        }
+        return bottomSafeAreaHeight
     }
 }

@@ -51,7 +51,9 @@ open class MercuryApi {
     
     /// Helper function which send HTTP req. and parse the json content in the response (if any)
     private func getJson(request: URLRequest, completion: @escaping ([String: Any]?) -> Void) {
-        let task = URLSession.shared.dataTask(with: request, completionHandler: {(data, response, error) -> Void in
+        var req = request
+        req.cachePolicy = .returnCacheDataElseLoad
+        let task = URLSession.shared.dataTask(with: req, completionHandler: {(data, response, error) -> Void in
             
             guard let responseData = data else {
                 print("Error: did not receive data") // TODO: error handling

@@ -42,6 +42,11 @@ class ArticleReaderController: ScrollableNavBarViewController, WKNavigationDeleg
             else {
                 hideReader()
             }
+            
+            // Needed for the navbar: If both scrollviews scrolls at the same time, the navbar goes crazy
+            self.webView.scrollView.setContentOffset(self.webView.scrollView.contentOffset, animated: false)
+            self.reader.scrollView.setContentOffset(self.reader.scrollView.contentOffset, animated: false)
+            
             updateToolbarColors()
             updateNavbarColors()
             updateReaderBackgroundColor()
@@ -90,7 +95,12 @@ class ArticleReaderController: ScrollableNavBarViewController, WKNavigationDeleg
         setupWebViews()
         
         updateReaderBackgroundColor()
-        
+        if #available(iOS 11.0, *) {
+            self.webView.scrollView.contentInsetAdjustmentBehavior = .never
+            self.reader.scrollView.contentInsetAdjustmentBehavior = .never
+            
+        }
+
         
         // They're hidden by default until a history is built
         navBarTitleView?.backButton.isHidden = true
@@ -107,7 +117,8 @@ class ArticleReaderController: ScrollableNavBarViewController, WKNavigationDeleg
         updateToolbarColors()
         if #available(iOS 11.0, *) {
             self.view.insetsLayoutMarginsFromSafeArea = false
-            
+            self.webView.scrollView.insetsLayoutMarginsFromSafeArea = false
+            self.reader.scrollView.insetsLayoutMarginsFromSafeArea = false
         }
     }
     
@@ -124,26 +135,26 @@ class ArticleReaderController: ScrollableNavBarViewController, WKNavigationDeleg
         self.automaticallyAdjustsScrollViewInsets = false
         
         let navBarHeight = self.navigationController?.navigationBar.frame.height ?? 0
-        let toolbarHeight:CGFloat = 0//self.navigationController?.toolbar.frame.height ?? 0
-        self.webView.scrollView.contentInset = UIEdgeInsets(top: navBarHeight + 20, left: 0, bottom: toolbarHeight, right: 0)
-        self.reader.scrollView.contentInset = UIEdgeInsets(top: navBarHeight + 20, left: 0, bottom: toolbarHeight, right: 0)
-        self.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: navBarHeight + 20, left: 0, bottom: toolbarHeight, right: 0)
-        self.reader.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: navBarHeight + 20, left: 0, bottom: toolbarHeight, right: 0)
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        self.webView.scrollView.contentInset = UIEdgeInsets(top: navBarHeight + statusBarHeight, left: 0, bottom: 0, right: 0)
+        self.reader.scrollView.contentInset = UIEdgeInsets(top: navBarHeight + statusBarHeight, left: 0, bottom: 0, right: 0)
+        self.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: navBarHeight + statusBarHeight, left: 0, bottom: 0, right: 0)
+        self.reader.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: navBarHeight + statusBarHeight, left: 0, bottom: 0, right: 0)
         
         self.view.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
-        webView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: -navBarHeight - 20).isActive = true
-        webView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: toolbarHeight).isActive = true
+        webView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        webView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         webView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
         webView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
         
         self.view.addSubview(reader)
         reader.translatesAutoresizingMaskIntoConstraints = false
-        readerTopConstraint = reader.topAnchor.constraint(equalTo: self.view.topAnchor, constant: self.isReaderEnabled ? -navBarHeight - 20 : self.view.frame.height)// + navBarHeight + 20)
+        readerTopConstraint = reader.topAnchor.constraint(equalTo: self.view.topAnchor, constant: self.isReaderEnabled ? 0: self.view.frame.height)// + navBarHeight + 20)
         readerTopConstraint!.isActive = true
         reader.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
         reader.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        reader.heightAnchor.constraint(equalTo: self.view.heightAnchor, constant: navBarHeight + toolbarHeight + 20).isActive = true
+        reader.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
         
         webView.scrollView.delegate = self
         reader.scrollView.delegate = self
@@ -282,7 +293,7 @@ class ArticleReaderController: ScrollableNavBarViewController, WKNavigationDeleg
     
     private func showReader() {
         if (self.readerTopConstraint != nil) {
-            self.readerTopConstraint!.constant = -(self.navigationController?.navigationBar.frame.height ?? 0) - 20
+            self.readerTopConstraint!.constant = 0//-(self.navigationController?.navigationBar.frame.height ?? 0) - 20
             UIView.animate(withDuration: 0.4) {
                 self.view.layoutIfNeeded()
             }
