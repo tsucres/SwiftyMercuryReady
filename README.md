@@ -22,7 +22,7 @@ Most modern webbrowers (mobile or desktop) implement a "reader mode" allowing to
 ## Presentation
 ![Custom font size](Screenshots/presentation.gif)
 
-##### Customisable font
+#### Customisable font
 ![Custom font size](Screenshots/font.png)
 ![Serif](Screenshots/serif.png)
 
@@ -30,16 +30,16 @@ You can easily switch between 3 **font sizes** and change between **serif/sans**
 
 
 
-##### Lght & Dark themes
+#### Lght & Dark themes
 ![Serif](Screenshots/darkTheme_small.png)
 ![Serif](Screenshots/lightTheme_small.png)
 
 
-##### Foldable navigation bar
+#### Foldable navigation bar
 ![Serif](Screenshots/scrollableNavBar.gif)
 
 
-##### Navigation Back & Forward
+#### Navigation Back & Forward
 
 ![Serif](Screenshots/back_forward.gif)
 
@@ -54,7 +54,7 @@ The project basically contains 3 parts, each one adding something to the previou
 
 ## Usage
 
-#### MercuriApi
+### MercuryApi
 First of all, you have to set you set your Mercury Api key. If you don't have one, you can get it for free [here](https://mercury.postlight.com/web-parser/).
 
 1. create a `keys.plist` file at the root of the project (along with the `info.plist` file)
@@ -146,7 +146,7 @@ Check the [`ReaderWebViewDemo.swift`](SwiftyMercuryReady/ReaderWebViewDemo.swift
 
 This part of the project is an example of implementation of the previous part. You can use it as is if it fits your needs or modify it as you want.
 
-In short, it's a controller handling a `WKWebView` that has a `ReaderWebView` associated (meaning the will always show the same content). It implements a navigation bar and a toolbar presenting the basic webview controls. 
+In short, it's a controller handling a `WKWebView` that has a `ReaderWebView` associated (meaning they will always show the same content). It implements a navigation bar and a toolbar presenting the basic webview controls (back, forward and refresh). 
 
 
 For a basic usage, all you have to do is instantiate the `ArticleReaderController` and give it a URL. Al the rest is controlled by the user. 
@@ -159,6 +159,5 @@ Check the [`ArticlesReaderDemo.swift `](SwiftyMercuryReady/ArticlesReaderDemo.sw
 
 ## TODO
 
-- scrollable navigation bar compatible with iOS 11
 - customisable background color for the reader (add swift properties for the color of the dark & light themes instead of hardcoding them in the html template)
 - better error handling in MercuryApi
