@@ -96,7 +96,7 @@ class ArticleTableViewController: UITableViewController {
         let controller = ArticleReaderController()
         
         
-        //controller.isReaderEnabled = true
+        controller.isReaderEnabled = true
         
         let backItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.backBarButtonItem = backItem

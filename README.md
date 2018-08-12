@@ -1,4 +1,20 @@
 # SwiftyMercuryReady
+
+<p align="center">
+    <a href="https://travis-ci.org/tsucres/SwiftyMercuryReady">
+      <img src="https://img.shields.io/travis/tsucres/SwiftyMercuryReady.svg">
+    </a>
+    <img src="https://img.shields.io/badge/Swift-4.1-orange.svg" />
+    <a href="https://opensource.org/licenses/MIT">
+      <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License" />
+    </a>
+</p>
+<p align="center">
+    >>> <a href="https://appetize.io/app/vqfyxz47vrkq5v2z0cpzq9bv04?device=iphonex&scale=75&orientation=portrait&osVersion=11.4" target="_blank"><strong>DEMO</strong></a> <<<
+</p>
+
+
+
 A MercuryApi based iOS reader written in Swift.
 ### Motivation
 Most modern webbrowers (mobile or desktop) implement a "reader mode" allowing to sanitise/epurate the design of a webpage and offer a better reading experience. However, WKWebView doesn't. Which means that an iOS app can't, natively, load a webpage and switch to the reader mode without passing it to safari. This project aims to add this functionality to a WKWebView subclass.
