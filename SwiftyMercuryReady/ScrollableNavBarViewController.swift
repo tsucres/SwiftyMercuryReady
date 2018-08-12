@@ -40,19 +40,43 @@ class ScrollableNavBarViewControllerTest: ScrollableNavBarViewController {
 class ScrollableNavBarViewController: UIViewController, UIScrollViewDelegate {
     private var previousWebviewYOffset: CGFloat = 0
     
+    private func getOrigins() -> (CGFloat?, CGFloat?, CGFloat?, CGFloat?) {
+        if let navCtrl = navigationController {
+            // 20 pt on classic screen, 44 on iPhone X
+            let statusBarHeight = UIApplication.shared.statusBarFrame.height
+            
+            let bottomSafeAreaHeight:CGFloat = getBottomSafeHeight()
+            
+            let navFrame: CGRect = navCtrl.navigationBar.frame
+            let toolFrame: CGRect = navCtrl.toolbar.frame
+            
+            // 49 on iPhone X, 44 on classic screen
+            let toolSize: CGFloat = toolFrame.size.height
+            
+            // Y position of the navbar when it is completely visible
+            let navbarVisibleOriginY: CGFloat = statusBarHeight
+            
+            // Y position of the navbar when it is completely hidden
+            let navbarHiddenOriginY: CGFloat = -(navFrame.size.height - statusBarHeight - 1)
+            
+            // Y position of the toolbar when it is completely visible
+            let toolbarVisibleOriginY:CGFloat = UIScreen.main.bounds.height - toolSize - bottomSafeAreaHeight
+            
+            // Y position of the toolbar when it is completely hidden
+            let toolbarHiddenOriginY: CGFloat = UIScreen.main.bounds.height
+            
+            return (navbarVisibleOriginY, navbarHiddenOriginY, toolbarVisibleOriginY, toolbarHiddenOriginY)
+        }
+        return (nil, nil, nil, nil)
+    }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let statusBarHeight = UIApplication.shared.statusBarFrame.height
-        
         if let navCtrl = navigationController {
             let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView)
             
             var navFrame: CGRect = navCtrl.navigationBar.frame
             var toolFrame: CGRect = navCtrl.toolbar.frame
             
-            let navSize: CGFloat = navFrame.size.height - statusBarHeight - 1
-            let toolSize: CGFloat = toolFrame.size.height
-
-            
+            let (navbarVisibleOriginY, navbarHiddenOriginY, toolbarVisibleOriginY, toolbarHiddenOriginY) = getOrigins()
             
             let scrollOffset: CGFloat = scrollView.contentOffset.y
             let scrollInset: CGFloat = scrollView.contentInset.top
@@ -60,42 +84,45 @@ class ScrollableNavBarViewController: UIViewController, UIScrollViewDelegate {
             let scrollHeight: CGFloat = scrollView.frame.size.height
             let scrollContentSizeHeight: CGFloat = scrollView.contentSize.height + scrollView.contentInset.bottom
             
-            let bottomSafeAreaHeight:CGFloat = getBottomSafeHeight()
-            
-            if navFrame.origin.y == -navSize && abs(velocity.y) < 300 && scrollOffset + scrollInset >= navFrame.size.height {
+            if navFrame.origin.y == navbarVisibleOriginY && toolFrame.origin.y == toolbarVisibleOriginY && velocity.y > 0 {
+                // If both bars are visible and the user scrolls up => nothing to do
+                self.previousWebviewYOffset = scrollOffset
+                return
+            }
+            // The following are the conditions to unfold the navbar...
+            if navFrame.origin.y == navbarHiddenOriginY && // If navbar is already hidden
+                toolFrame.origin.y == UIScreen.main.bounds.height && // the toolbar too
+                abs(velocity.y) < 300 && // and velocity is small
+                scrollOffset + scrollInset >= navFrame.size.height { // and we are not at top edge of the scroll content
+                // then we don't change the position of the navbar nor the position of the toolbar
                 self.previousWebviewYOffset = scrollOffset
                 return
             }
             
             if scrollOffset <= -scrollInset { // Full top
                 // We completly show the toolbar and the navbar
-                navFrame.origin.y = statusBarHeight
-                toolFrame.origin.y = UIScreen.main.bounds.height - toolSize - bottomSafeAreaHeight
+                navFrame.origin.y = navbarVisibleOriginY!
+                toolFrame.origin.y = toolbarVisibleOriginY!
                 
             } else if (scrollOffset + scrollHeight + scrollInset) >= scrollContentSizeHeight { // Full bottom
                 // We completly hide the toolbar and the navbar
-                navFrame.origin.y = -navSize
-                toolFrame.origin.y = UIScreen.main.bounds.height
+                navFrame.origin.y = navbarHiddenOriginY!
+                toolFrame.origin.y = toolbarHiddenOriginY!
             } else {
                 // Something in between
-                navFrame.origin.y = min(statusBarHeight, max(-navSize, navFrame.origin.y - scrollDiff))
-                toolFrame.origin.y = max(UIScreen.main.bounds.height - toolSize - bottomSafeAreaHeight, min(UIScreen.main.bounds.height, toolFrame.origin.y + scrollDiff))
+                navFrame.origin.y = min(navbarVisibleOriginY!, max(navbarHiddenOriginY!, navFrame.origin.y - scrollDiff))
+                toolFrame.origin.y = max(toolbarVisibleOriginY!, min(toolbarHiddenOriginY!, toolFrame.origin.y + scrollDiff))
             }
             navCtrl.navigationBar.frame = navFrame
             navCtrl.toolbar.frame = toolFrame
             
-            let navFramePercentageHidden: CGFloat = ((statusBarHeight - navFrame.origin.y) / (navFrame.size.height - 1))
-            let toolFramePercentageHidden: CGFloat = 1 - ((UIScreen.main.bounds.height - bottomSafeAreaHeight - toolFrame.origin.y) / (toolFrame.size.height - 1))
-            
+            let navFramePercentageHidden: CGFloat = ((navbarVisibleOriginY! - navFrame.origin.y) / (navbarVisibleOriginY! - navbarHiddenOriginY!))
+            let toolFramePercentageHidden: CGFloat = 1 + (toolFrame.origin.y - toolbarHiddenOriginY!)/(toolbarHiddenOriginY! - toolbarVisibleOriginY!)
             updateNavBarButtonItems(alpha: 1 - navFramePercentageHidden)
             updateToolBarButtonItems(alpha: 1 - toolFramePercentageHidden)
+            
             self.previousWebviewYOffset = scrollOffset
-            
-            
-            
         }
-        
-        
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
